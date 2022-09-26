@@ -1,0 +1,10 @@
+{
+  "name": "discord-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^18.7.22",
+    "typescript": "^4.8.3"
+  }
+}
