@@ -29,4 +29,4 @@ client.on("messageCreate", (msg) => {
   }
 });
 
-client.login(process.env.TOKEN).catch((err: any) => console.log(err));
+client.login(process.env.TOKEN).catch((err) => console.log(err));
