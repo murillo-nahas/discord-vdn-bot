@@ -45,15 +45,33 @@ client.on('messageCreate', async (msg) => {
 	// 30s to connect - otherwise connection rejected
 	entersState(connection, VoiceConnectionStatus.Ready, 30e3);
 
+	// need refactor
 	for (let i = 0; i < VoiceCommands.length; i++) {
 		const command = VoiceCommands[i];
 
-		if (msg.content.startsWith(process.env.PREFIX! + 'p ' + command.id))
-			command.action(msg, connection);
-		else
-			msg.channel.send('Comando não encontrado!');
+		if (msg.content.startsWith(process.env.PREFIX! + command.id)) {
+			if (command.options && command.options.length > 0) {
+				const option = /(?![a-z]\s)[0-9]/;
 
-		break;
+				if (option.exec(msg.content)) {
+					const selectedOption = Number((option.exec(msg.content) as string[])[0]);
+
+					const op = command.options.filter((op) => {
+						if (op.id === selectedOption) return op;
+					});
+
+					if (op.length !== 0) {
+						op[0].action(connection);
+					} else {
+						msg.channel.send('Opção não existente, digite ;;help para ver as opções.');
+						return;
+					}
+				}
+			} else {
+				if (command.action)
+					command.action(connection);
+			}
+		}
 	}
 });
 

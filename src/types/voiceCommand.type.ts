@@ -2,8 +2,15 @@ import { VoiceConnection } from "@discordjs/voice";
 import { Message } from "discord.js";
 
 export type VoiceCommand = {
-	id: number;
+	id: string;
 	name: string;
 	description: string;
-	action: (msg: Message<boolean>, con: VoiceConnection) => void
+	options?: VoiceOption[];
+	action?: (con: VoiceConnection) => void;
+}
+
+export type VoiceOption = {
+	id: number;
+	name: string;
+	action: (con: VoiceConnection) => void;
 }
