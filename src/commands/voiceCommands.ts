@@ -28,7 +28,12 @@ export const VoiceCommands: VoiceCommand[] = [
 				name: 'Gostou? Então leva pra casa!',
 				description: '• Gostou? Então leva pra casa.',
 				action: (con) => {
-					console.log('id: 2, gostou leva pra casa');
+					const stream = ytdl('https://www.youtube.com/watch?v=zBh0stt0ayI', { filter : 'audioonly' });
+
+					const resource = createAudioResource(stream);
+
+					player.play(resource);
+					con.subscribe(player);
 				}
 			}
 		]

@@ -7,6 +7,7 @@ import { Client, IntentsBitField, GatewayIntentBits } from 'discord.js'
 import dotenv from 'dotenv';
 
 import { VoiceCommands } from './commands/voiceCommands';
+import { Utils } from './utils';
 
 dotenv.config();
 
@@ -52,20 +53,19 @@ client.on('messageCreate', async (msg) => {
 		const command = VoiceCommands[i];
 
 		if (msg.content.startsWith(process.env.PREFIX! + command.id)) {
-			if (command.options && command.options.length > 0) {
+			if (Utils.hasOptions(command)) {
+				// get the option - example: ;;p 1 -> will catch the '1'
 				const option = /(?![a-z]\s)[0-9]/;
 
-				if (option.exec(msg.content)) {
-					const selectedOption = Number((option.exec(msg.content) as string[])[0]);
+				if (option.test(msg.content)) {
+					const optionSelected = Number(option.exec(msg.content)?.[0]);
 
-					const op = command.options.filter((op) => {
-						if (op.id === selectedOption) return op;
-					});
+					const op = command?.options?.filter((op) => op.id === optionSelected);
 
-					if (op.length !== 0) {
-						op[0].action(connection);
-					} else {
-						msg.channel.send('Opção não existente, digite ;;help para ver as opções.');
+					if (op)
+						op[0].action(connection)
+					else {
+						msg.channel.send('Essa opção não existe. Digite ;;help para ves as opções');
 						return;
 					}
 				}

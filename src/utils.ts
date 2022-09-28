@@ -32,7 +32,7 @@ export class Utils {
 	}
 
 	static hasOptions(command: VoiceCommand): boolean {
-		const com = VoiceCommands.filter((c) => c === command)
+		const com = VoiceCommands.filter((c) => c === command);
 		return com[0]?.options !== undefined;
 	}
 
