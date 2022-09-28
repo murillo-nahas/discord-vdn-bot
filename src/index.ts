@@ -1,31 +1,30 @@
 import {
   joinVoiceChannel,
   entersState,
-  VoiceConnectionStatus,
-  createAudioResource
+  VoiceConnectionStatus
 } from '@discordjs/voice'
 import { Client, IntentsBitField, GatewayIntentBits } from 'discord.js'
 import dotenv from 'dotenv';
-import ytdl from 'ytdl-core';
 
 import { VoiceCommands } from './commands/voiceCommands';
-// import { player } from './player';
 
 dotenv.config();
 
 const client = new Client({ intents: [
 	IntentsBitField.Flags.GuildMessages,
 	IntentsBitField.Flags.MessageContent,
+	IntentsBitField.Flags.GuildVoiceStates,
 	GatewayIntentBits.Guilds,
 	GatewayIntentBits.GuildMessages,
-	GatewayIntentBits.MessageContent
+	GatewayIntentBits.MessageContent,
+	GatewayIntentBits.GuildVoiceStates
 ] });
 
 client.on('ready', () => {
   console.log('All right man! What do you need, an?');
 });
 
-client.on('messageCreate', msg => {
+client.on('messageCreate', async (msg) => {
   if (msg.author.bot) return;
 
   if (!msg.content.startsWith(process.env.PREFIX!)) return;
@@ -42,10 +41,6 @@ client.on('messageCreate', msg => {
 		guildId: channel.guild.id,
 		adapterCreator: channel.guild.voiceAdapterCreator,
 	});
-
-	// connection.disconnect();
-	// connection.destroy();
-	// return;
 
 	// 30s to connect - otherwise connection rejected
 	entersState(connection, VoiceConnectionStatus.Ready, 30e3);

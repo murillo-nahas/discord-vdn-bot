@@ -9,15 +9,11 @@ export const VoiceCommands: VoiceCommand[] = [
 		name: 'Dança Gatinho, Dança!',
 		description: 'Entra no chat de voz e toca dança gatinho',
 		action: (msg, con) => {
-			const stream = ytdl('https://www.youtube.com/watch?v=zBh0stt0ayI', { filter : 'audioonly', quality: 'lowestaudio' });
+			const stream = ytdl('https://www.youtube.com/watch?v=zBh0stt0ayI', { filter : 'audioonly' });
+
 			const resource = createAudioResource(stream);
 
 			player.play(resource);
-
-			// not working
-			player.on('error', (err) => {
-				console.log('player error', err);
-			});
 
 			con.subscribe(player);
 		}
