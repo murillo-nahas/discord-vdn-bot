@@ -41,7 +41,7 @@ client.on('messageCreate', msg => {
 		const command = VoiceCommands[i];
 
 		if (msg.content.startsWith(process.env.PREFIX! + 'p ' + command.id))
-			command.action();
+			command.action(msg);
 		else
 			msg.channel.send('Comando não encontrado!');
 
