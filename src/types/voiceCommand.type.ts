@@ -6,11 +6,12 @@ export type VoiceCommand = {
 	name: string;
 	description: string;
 	options?: VoiceOption[];
-	action?: (con: VoiceConnection) => void;
+	action?: (msg: Message<boolean>, con: VoiceConnection) => void;
 }
 
 export type VoiceOption = {
 	id: number;
 	name: string;
+	description: string;
 	action: (con: VoiceConnection) => void;
 }

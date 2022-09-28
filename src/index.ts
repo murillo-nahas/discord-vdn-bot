@@ -36,6 +36,9 @@ client.on('messageCreate', async (msg) => {
 		return;
 	}
 
+	msg.content = msg.content.toLowerCase();
+	console.log(msg.content);
+
 	const connection = joinVoiceChannel({
 		channelId: channel.id,
 		guildId: channel.guild.id,
@@ -69,7 +72,7 @@ client.on('messageCreate', async (msg) => {
 				}
 			} else {
 				if (command.action)
-					command.action(connection);
+					command.action(msg, connection);
 			}
 		}
 	}

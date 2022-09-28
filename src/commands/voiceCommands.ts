@@ -7,11 +7,12 @@ export const VoiceCommands: VoiceCommand[] = [
 	{
 		id: 'p',
 		name: 'play',
-		description: 'toca algum som do programa vai dar namoro',
+		description: 'Lista de comandos: \n • ;;p é utilizado para tocar algum som do Vai dar Namoro!',
 		options: [
 			{
 				id: 1,
-				name: 'Dança gatinho',
+				name: 'Dança gatinho, dança!',
+				description: '• ;;p 1 roda: Dança gatinho, dança!',
 				action: (con) => {
 					const stream = ytdl('https://www.youtube.com/watch?v=zBh0stt0ayI', { filter : 'audioonly' });
 
@@ -24,6 +25,7 @@ export const VoiceCommands: VoiceCommand[] = [
 			{
 				id: 2,
 				name: 'Gostou? Então leva pra casa!',
+				description: '• ;;p 2 roda: Gostou? Então leva pra casa.',
 				action: (con) => {
 					console.log('id: 2, gostou leva pra casa');
 				}
@@ -33,17 +35,47 @@ export const VoiceCommands: VoiceCommand[] = [
 	{
 		id: 'stop',
 		name: 'stop',
-		description: 'pausa a música',
-		action: (con) => {
+		description: '• Pausa o aúdio.',
+		action: (msg, con) => {
 			player.pause();
 		}
 	},
 	{
 		id: 'resume',
 		name: 'resume',
-		description: 'despausa a música',
-		action: (con) => {
+		description: '• Despausa a música.',
+		action: (msg, con) => {
 			player.unpause();
+		}
+	},
+	{
+		id: 'disconnect',
+		name: 'disconnect',
+		description: '• Desconecta o bot.',
+		action: (msg, con) => {
+			con.disconnect();
+			con.destroy();
+		}
+	},
+	{
+		id: 'help',
+		name: 'help',
+		description: '-----------------------------------------------',
+		action: (msg, con) => {
+			VoiceCommands.map((el) => {
+
+				msg.channel.send(el.description);
+
+				if(el.options) {
+					el.options.map((res) => {
+						msg.channel.send(res.description)
+					})	
+				}
+				//return el.id === 'p';
+			})
+			// filterCommand[0].options?.map((res) => {
+			// 	msg.channel.send(res.description);
+			// });
 		}
 	}
 ];
