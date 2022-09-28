@@ -30,17 +30,23 @@ client.on('messageCreate', msg => {
 
   if (!msg.content.startsWith(process.env.PREFIX!)) return;
 
-	const { channel } = msg.member!.voice;
+	// const { channel } = msg.member!.voice;
 
-	if (!channel) {
-		msg.channel.send('Você deve estar em um canal de voz!');
-		return;
-	}
+	// if (!channel) {
+	// 	msg.channel.send('Você deve estar em um canal de voz!');
+	// 	return;
+	// }
 
-	VoiceCommands.map((command) => {
+	for (let i = 0; i < VoiceCommands.length; i++) {
+		const command = VoiceCommands[i];
+
 		if (msg.content.startsWith(process.env.PREFIX! + 'p ' + command.id))
 			command.action();
-	});
+		else
+			msg.channel.send('Comando não encontrado!');
+
+		break;
+	}
 });
 
 client.login(process.env.TOKEN).catch((err) => console.log(err));
