@@ -2,17 +2,19 @@ import { VoiceCommand } from "../types/voiceCommand.type";
 import { player } from '../player';
 import ytdl from "ytdl-core";
 import { createAudioResource } from "@discordjs/voice";
+import { blockQuote, bold } from "discord.js";
+import { Utils } from '../utils';
 
 export const VoiceCommands: VoiceCommand[] = [
 	{
-		id: 'p',
+		id: 'play',
 		name: 'play',
-		description: 'Lista de comandos: \n • ;;p é utilizado para tocar algum som do Vai dar Namoro!',
+		description: 'Toca algum som do Vai dar Namoro!',
 		options: [
 			{
 				id: 1,
 				name: 'Dança gatinho, dança!',
-				description: '• ;;p 1 roda: Dança gatinho, dança!',
+				description: '• Dança gatinho, dança!',
 				action: (con) => {
 					const stream = ytdl('https://www.youtube.com/watch?v=zBh0stt0ayI', { filter : 'audioonly' });
 
@@ -25,7 +27,7 @@ export const VoiceCommands: VoiceCommand[] = [
 			{
 				id: 2,
 				name: 'Gostou? Então leva pra casa!',
-				description: '• ;;p 2 roda: Gostou? Então leva pra casa.',
+				description: '• Gostou? Então leva pra casa.',
 				action: (con) => {
 					console.log('id: 2, gostou leva pra casa');
 				}
@@ -35,7 +37,7 @@ export const VoiceCommands: VoiceCommand[] = [
 	{
 		id: 'stop',
 		name: 'stop',
-		description: '• Pausa o aúdio.',
+		description: 'Pausa o aúdio.',
 		action: (msg, con) => {
 			player.pause();
 		}
@@ -43,7 +45,7 @@ export const VoiceCommands: VoiceCommand[] = [
 	{
 		id: 'resume',
 		name: 'resume',
-		description: '• Despausa a música.',
+		description: 'Despausa a música.',
 		action: (msg, con) => {
 			player.unpause();
 		}
@@ -51,7 +53,7 @@ export const VoiceCommands: VoiceCommand[] = [
 	{
 		id: 'disconnect',
 		name: 'disconnect',
-		description: '• Desconecta o bot.',
+		description: 'Desconecta o bot.',
 		action: (msg, con) => {
 			con.disconnect();
 			con.destroy();
@@ -60,22 +62,30 @@ export const VoiceCommands: VoiceCommand[] = [
 	{
 		id: 'help',
 		name: 'help',
-		description: '-----------------------------------------------',
+		description: 'Lista todos os comandos',
 		action: (msg, con) => {
+			msg.channel.send(blockQuote(bold('Lista de Comandos ... ')));
 			VoiceCommands.map((el) => {
-
-				msg.channel.send(el.description);
-
-				if(el.options) {
-					el.options.map((res) => {
-						msg.channel.send(res.description)
-					})	
-				}
-				//return el.id === 'p';
+				msg.channel.send({
+					embeds: [
+						{
+							title: bold(el.name),
+							...(
+								Utils.hasOptions(el) ? {
+									fields: Utils.getOptions(el)
+								} : {
+									fields: [
+										{
+											name: '------------',
+											value: el.description
+										}
+									]
+								}
+							)
+						}
+					]
+				})
 			})
-			// filterCommand[0].options?.map((res) => {
-			// 	msg.channel.send(res.description);
-			// });
 		}
 	}
 ];

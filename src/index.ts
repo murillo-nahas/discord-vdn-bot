@@ -37,7 +37,6 @@ client.on('messageCreate', async (msg) => {
 	}
 
 	msg.content = msg.content.toLowerCase();
-	console.log(msg.content);
 
 	const connection = joinVoiceChannel({
 		channelId: channel.id,
