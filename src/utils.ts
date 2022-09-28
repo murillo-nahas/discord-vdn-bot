@@ -1,5 +1,10 @@
-import { VoiceCommand, VoiceOption } from './types/voiceCommand.type';
+import { VoiceCommand } from './types/voiceCommand.type';
 import { VoiceCommands } from './commands/voiceCommands';
+
+type CustomMessage = {
+	title: string;
+	fields: OptionCustomMessage[];
+}
 
 type OptionCustomMessage = {
 	name: string;
@@ -29,5 +34,28 @@ export class Utils {
 	static hasOptions(command: VoiceCommand): boolean {
 		const com = VoiceCommands.filter((c) => c === command)
 		return com[0]?.options !== undefined;
+	}
+
+	static getCommandsAsMessages(): CustomMessage[] {
+		const commands: CustomMessage[] = [];
+
+		VoiceCommands.map((com) => {
+			commands.push({
+				title: com.name,
+				...(this.hasOptions(com) ? {
+					fields: this.getOptions(com)
+				}: {
+					fields: [
+						{
+							name: '-----------',
+							value: com.description,
+							inline: false
+						}
+					]
+				})
+			});
+		});
+
+		return commands;
 	}
 }

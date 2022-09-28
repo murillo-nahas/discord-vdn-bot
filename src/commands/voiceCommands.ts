@@ -2,7 +2,6 @@ import { VoiceCommand } from "../types/voiceCommand.type";
 import { player } from '../player';
 import ytdl from "ytdl-core";
 import { createAudioResource } from "@discordjs/voice";
-import { blockQuote, bold } from "discord.js";
 import { Utils } from '../utils';
 
 export const VoiceCommands: VoiceCommand[] = [
@@ -64,27 +63,8 @@ export const VoiceCommands: VoiceCommand[] = [
 		name: 'help',
 		description: 'Lista todos os comandos',
 		action: (msg, con) => {
-			msg.channel.send(blockQuote(bold('Lista de Comandos ... ')));
-			VoiceCommands.map((el) => {
-				msg.channel.send({
-					embeds: [
-						{
-							title: bold(el.name),
-							...(
-								Utils.hasOptions(el) ? {
-									fields: Utils.getOptions(el)
-								} : {
-									fields: [
-										{
-											name: '------------',
-											value: el.description
-										}
-									]
-								}
-							)
-						}
-					]
-				})
+			msg.channel.send({
+				embeds: Utils.getCommandsAsMessages()
 			})
 		}
 	}
