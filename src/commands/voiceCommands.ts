@@ -1,12 +1,20 @@
 import { VoiceCommand } from "../types/voiceCommand";
 
-const VoiceCommands: VoiceCommand[] = [
+export const VoiceCommands: VoiceCommand[] = [
 	{
-		name: 'EEEEEPA',
-		alias: 'epa',
-		description: 'Entra no chat de voz e grita EEEEPA'
+		id: 1,
+		name: 'Dança Gatinho, Dança!',
+		description: 'Entra no chat de voz e toca dança gatinho',
+		action: () => {
+			console.log('id: 1, dança gatinho');
+		}
+	},
+	{
+		id: 2,
+		name: 'Gostou? Então leva pra casa!',
+		description: 'Entra no chat de voz e começa a tocar gostou então leva pra casa',
+		action: () => {
+			console.log('id: 2, gostou leva pra casa');
+		}
 	}
 ];
-
-
-export default VoiceCommands;

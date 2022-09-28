@@ -1,5 +1,6 @@
 export type VoiceCommand = {
+	id: number;
 	name: string;
-	alias: string;
 	description: string;
+	action: () => void
 }
