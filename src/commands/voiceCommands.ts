@@ -3,6 +3,7 @@ import { player } from '../player';
 import ytdl from "ytdl-core";
 import { createAudioResource } from "@discordjs/voice";
 import { Utils } from '../utils';
+import { catchphrasesSet } from '../consts/messageConst';
 
 export const VoiceCommands: VoiceCommand[] = [
 	{
@@ -71,6 +72,15 @@ export const VoiceCommands: VoiceCommand[] = [
 			msg.channel.send({
 				embeds: Utils.getCommandsAsMessages()
 			})
+		}
+	},
+	{
+		id: 'random',
+		name: 'random',
+		description: 'Sorteia um dos bordões no chat',
+		action: (msg, con) => {
+			const randomElement = catchphrasesSet[Math.floor(Math.random() * catchphrasesSet.length)]
+			msg.channel.send(randomElement)
 		}
 	}
 ];
