@@ -1,9 +1,11 @@
 import { VoiceCommand } from "../types/voiceCommand.type";
 import { player } from '../player';
-import ytdl from "ytdl-core";
 import { createAudioResource } from "@discordjs/voice";
 import { Utils } from '../utils';
 import { catchphrasesSet } from '../consts/messageConst';
+
+import path from 'path';
+import { createReadStream } from "fs";
 
 export const VoiceCommands: VoiceCommand[] = [
 	{
@@ -16,9 +18,7 @@ export const VoiceCommands: VoiceCommand[] = [
 				name: 'Dança gatinho, dança!',
 				description: '• Dança gatinho, dança!',
 				action: (con) => {
-					const stream = ytdl('https://www.youtube.com/watch?v=zBh0stt0ayI', { filter : 'audioonly' });
-
-					const resource = createAudioResource(stream);
+					const resource = createAudioResource(createReadStream(path.join(__dirname + '/../assets/DancaGatinho.mp3')));
 
 					player.play(resource);
 					con.subscribe(player);
@@ -29,12 +29,7 @@ export const VoiceCommands: VoiceCommand[] = [
 				name: 'Gostou? Então leva pra casa!',
 				description: '• Gostou? Então leva pra casa.',
 				action: (con) => {
-					const stream = ytdl('https://www.youtube.com/watch?v=zBh0stt0ayI', { filter : 'audioonly' });
-
-					const resource = createAudioResource(stream);
-
-					player.play(resource);
-					con.subscribe(player);
+					// TODO: add the song
 				}
 			}
 		]
@@ -65,6 +60,15 @@ export const VoiceCommands: VoiceCommand[] = [
 		}
 	},
 	{
+		id: 'random',
+		name: 'random',
+		description: 'Sorteia um dos bordões no chat',
+		action: (msg, con) => {
+			const randomElement = catchphrasesSet[Math.floor(Math.random() * catchphrasesSet.length)]
+			msg.channel.send(randomElement)
+		}
+	},
+	{
 		id: 'help',
 		name: 'help',
 		description: 'Lista todos os comandos',
@@ -72,15 +76,6 @@ export const VoiceCommands: VoiceCommand[] = [
 			msg.channel.send({
 				embeds: Utils.getCommandsAsMessages()
 			})
-		}
-	},
-	{
-		id: 'random',
-		name: 'random',
-		description: 'Sorteia um dos bordões no chat',
-		action: (msg, con) => {
-			const randomElement = catchphrasesSet[Math.floor(Math.random() * catchphrasesSet.length)]
-			msg.channel.send(randomElement)
 		}
 	}
 ];
