@@ -29,7 +29,7 @@ client.on('ready', () => {
   console.log('All right man! What do you need, an?');
 });
 
-client.on('messageCreate', async (msg) => {
+client.on('messageCreate', async (msg: any) => {
   if (msg.author.bot) return;
 
   if (!msg.content.startsWith(prefix)) return;
@@ -38,45 +38,46 @@ client.on('messageCreate', async (msg) => {
 
 	let command = Commands.filter(c => message.startsWith(c.id))[0];
 
-	if (command !== undefined) {
-		if (command.type === 'voice') {
-			command = command as VoiceCommand;
-
-			const { channel } = msg.member!.voice;
-
-			if (!channel) {
-				msg.channel.send('Você deve estar em um canal de voz!');
-				return;
-			}
-
-			const connection = joinVoiceChannel({
-				channelId: channel.id,
-				guildId: channel.guild.id,
-				adapterCreator: channel.guild.voiceAdapterCreator,
-			});
-
-			// 30s to connect - otherwise connection rejected
-			entersState(connection, VoiceConnectionStatus.Ready, 30e3);
-
-			// check if has options
-			// if (command.options && command.options.length > 0) {
-			// 	const option = Number(message.split(' ')[1]);
-
-			// 	if (isNaN(option)) {
-			// 		msg.channel.send('Digite uma opção valida para este comando!');
-			// 		return;
-			// 	}
-
-			// 	const selected = command.options.filter(o => o.id === option)[0];
-			// 	selected.action(connection);
-			// }
-		} else {
-			command = command as TextCommand | ActionsCommand;
-		}
-	} else {
+	if (!command) {
 		msg.channel.send('Essa opção não existe. Digite ;;help para ves as opções');
 		return;
 	}
+
+	if (command.type === 'voice') {
+		command = command as VoiceCommand;
+
+		const { channel } = msg.member!.voice;
+
+		if (!channel) {
+			msg.channel.send('Você deve estar em um canal de voz!');
+			return;
+		}
+
+		const connection = joinVoiceChannel({
+			channelId: channel.id,
+			guildId: channel.guild.id,
+			adapterCreator: channel.guild.voiceAdapterCreator,
+		});
+
+		// 30s to connect - otherwise connection rejected
+		entersState(connection, VoiceConnectionStatus.Ready, 30e3);
+
+		// check if has options
+		// if (command.options && command.options.length > 0) {
+		// 	const option = Number(message.split(' ')[1]);
+
+		// 	if (isNaN(option)) {
+		// 		msg.channel.send('Digite uma opção valida para este comando!');
+		// 		return;
+		// 	}
+
+		// 	const selected = command.options.filter(o => o.id === option)[0];
+		// 	selected.action(connection);
+		// }
+	} else {
+		command = command as TextCommand | ActionsCommand;
+	}
+	
 });
 
-client.login(process.env.TOKEN).catch((err) => console.log(err));
+client.login(process.env.TOKEN).catch((err: any) => console.log(err));
