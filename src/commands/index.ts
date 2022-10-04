@@ -1,9 +1,9 @@
 import { VoiceCommands } from './voiceCommands';
 import { TextCommands } from './textCommands';
 import { ActionsCommands } from './actionsCommands';
-import { Command } from '../types/command.type';
+import { BaseCommand } from '../models/baseCommand.type';
 
-export const Commands: Command<'voice' | 'text'>[] = [
+export const Commands: BaseCommand[] = [
 	...VoiceCommands,
 	...TextCommands,
 	...ActionsCommands

@@ -2,12 +2,13 @@ import { createAudioResource } from "@discordjs/voice"
 import path from 'path';
 import { createReadStream } from "fs";
 
-import { VoiceCommand, VoiceOption } from "../types/voiceCommand.type";
+import { VoiceCommand } from "../models/voiceCommand.type";
 import { player } from '../player';
 import { Utils } from '../utils';
+import { Option } from '../types/option.type';
 
-const createOptionFromAssets = (): VoiceOption[] => {
-	const options: VoiceOption[] = [];
+const createOptionFromAssets = (): Option[] => {
+	const options: Option[] = [];
 
 	Utils.getAllAssets().forEach((op, index) => {
 		const name = op.split('.')[0];
@@ -28,11 +29,10 @@ const createOptionFromAssets = (): VoiceOption[] => {
 };
 
 export const VoiceCommands: VoiceCommand[] = [
-	{
+	new VoiceCommand({
 		id: 'play',
 		name: 'play',
 		description: 'Toca algum som do Vai dar Namoro!',
-		options: createOptionFromAssets(),
-		type: 'voice'
-	}
+		options: createOptionFromAssets()
+	})
 ];

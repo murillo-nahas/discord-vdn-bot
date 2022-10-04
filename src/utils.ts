@@ -1,4 +1,4 @@
-import { VoiceCommand } from './types/voiceCommand.type';
+import { VoiceCommand } from './models/voiceCommand.type';
 import { VoiceCommands } from './commands/voiceCommands';
 import { OptionCustomMessage } from './types/optionCustomMessage.type';
 import { CustomMessage } from './types/customMessage.type';

@@ -7,9 +7,9 @@ import { Client, IntentsBitField, GatewayIntentBits } from 'discord.js'
 import dotenv from 'dotenv';
 
 import { Commands } from './commands';
-import { ActionsCommand } from './types/actionsCommand.type';
-import { TextCommand } from './types/textCommand.type';
-import { VoiceCommand } from './types/voiceCommand.type';
+import { ActionsCommand } from './models/actionsCommand.type';
+import { TextCommand } from './models/textCommand.type';
+import { VoiceCommand } from './models/voiceCommand.type';
 
 dotenv.config();
 
