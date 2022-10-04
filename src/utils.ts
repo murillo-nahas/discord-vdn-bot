@@ -1,16 +1,9 @@
 import { VoiceCommand } from './types/voiceCommand.type';
 import { VoiceCommands } from './commands/voiceCommands';
-
-type CustomMessage = {
-	title: string;
-	fields: OptionCustomMessage[];
-}
-
-type OptionCustomMessage = {
-	name: string;
-	value: string;
-	inline: boolean;
-}
+import { OptionCustomMessage } from './types/optionCustomMessage.type';
+import { CustomMessage } from './types/customMessage.type';
+import fs from 'fs';
+import path from 'path';
 
 export class Utils {
 	static getOptions(command: VoiceCommand): OptionCustomMessage[] {
@@ -57,5 +50,9 @@ export class Utils {
 		});
 
 		return commands;
+	}
+
+	static getAllAssets(): string[] {
+		return fs.readdirSync(path.join(__dirname + './../src/assets'));
 	}
 }

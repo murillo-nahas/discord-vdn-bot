@@ -1,4 +1,4 @@
-import { VoiceCommand } from "../types/voiceCommand.type";
+import { VoiceCommand, VoiceOption } from "../types/voiceCommand.type";
 import { player } from '../player';
 import { createAudioResource } from "@discordjs/voice";
 import { Utils } from '../utils';
@@ -7,101 +7,33 @@ import { catchphrasesSet } from '../consts/messageConst';
 import path from 'path';
 import { createReadStream } from "fs";
 
+const createOptionFromAssets = (): VoiceOption[] => {
+	const options: VoiceOption[] = [];
+
+	Utils.getAllAssets().forEach((op, index) => {
+		const name = op.split('.')[0];
+
+		options.push({
+			id: index + 1,
+			name,
+			description: name, // should remove description
+			action: (con) => {
+				const resource = createAudioResource(createReadStream(path.join(__dirname + `/../assets/${name}.mp3`)));
+				player.play(resource);
+				con.subscribe(player);
+			}
+		});
+	});
+
+	return options;
+};
+
 export const VoiceCommands: VoiceCommand[] = [
 	{
 		id: 'play',
 		name: 'play',
 		description: 'Toca algum som do Vai dar Namoro!',
-		options: [
-			{
-				id: 1,
-				name: 'Dança gatinho, dança!',
-				description: '• Dança gatinho, dança!',
-				action: (con) => {
-					const resource = createAudioResource(createReadStream(path.join(__dirname + '/../assets/DancaGatinho.mp3')));
-
-					player.play(resource);
-					con.subscribe(player);
-				},
-			},
-			{
-				id: 2,
-				name: 'AAAAAI',
-				description: '• AAAAAI',
-				action: (con) => {
-					const resource = createAudioResource(createReadStream(path.join(__dirname + '/../assets/Ai.mp3')));
-
-					player.play(resource);
-					con.subscribe(player);
-				}
-			},
-			{
-				id: 3,
-				name: 'AiAiAi',
-				description: '• AiAiAi',
-				action: (con) => {
-					const resource = createAudioResource(createReadStream(path.join(__dirname + '/../assets/AiAiAi.mp3')));
-
-					player.play(resource);
-					con.subscribe(player);
-				}
-			},
-			{
-				id: 4,
-				name: 'Ai Gostei',
-				description: '• Aai gostei',
-				action: (con) => {
-					const resource = createAudioResource(createReadStream(path.join(__dirname + '/../assets/AiGostei.mp3')));
-
-					player.play(resource);
-					con.subscribe(player);
-				}
-			},
-			{
-				id: 5,
-				name: 'Ai Mamae',
-				description: '• Aai mamae',
-				action: (con) => {
-					const resource = createAudioResource(createReadStream(path.join(__dirname + '/../assets/AiMamae.mp3')));
-
-					player.play(resource);
-					con.subscribe(player);
-				}
-			},
-			{
-				id: 6,
-				name: 'AOOOOO Potencia',
-				description: '• AOOOOO Potencia',
-				action: (con) => {
-					const resource = createAudioResource(createReadStream(path.join(__dirname + '/../assets/AoPotencia.mp3')));
-
-					player.play(resource);
-					con.subscribe(player);
-				}
-			},
-			{
-				id: 7,
-				name: 'Atumalaca',
-				description: '• Atumalaca',
-				action: (con) => {
-					const resource = createAudioResource(createReadStream(path.join(__dirname + '/../assets/Atumalaca.mp3')));
-
-					player.play(resource);
-					con.subscribe(player);
-				}
-			},
-			{
-				id: 8,
-				name: 'CAVALO',
-				description: '• CAVALO',
-				action: (con) => {
-					const resource = createAudioResource(createReadStream(path.join(__dirname + '/../assets/Cavalo.mp3')));
-
-					player.play(resource);
-					con.subscribe(player);
-				}
-			}
-		]
+		options: createOptionFromAssets()
 	},
 	{
 		id: 'stop',
