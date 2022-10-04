@@ -1,15 +1,20 @@
 import {
   joinVoiceChannel,
   entersState,
-  VoiceConnectionStatus
+  VoiceConnectionStatus,
+	VoiceConnection
 } from '@discordjs/voice'
 import { Client, IntentsBitField, GatewayIntentBits } from 'discord.js'
 import dotenv from 'dotenv';
 
-import { VoiceCommands } from './commands/voiceCommands';
-import { Utils } from './utils';
+import { Commands } from './commands';
+import { ActionsCommand } from './models/actionsCommand.type';
+import { TextCommand } from './models/textCommand.type';
+import { VoiceCommand } from './models/voiceCommand.type';
 
 dotenv.config();
+
+const prefix = process.env.PREFIX!;
 
 const client = new Client({ intents: [
 	IntentsBitField.Flags.GuildMessages,
@@ -25,56 +30,58 @@ client.on('ready', () => {
   console.log('All right man! What do you need, an?');
 });
 
-client.on('messageCreate', async (msg) => {
+let connection: VoiceConnection | undefined;
+
+client.on('messageCreate', async (msg: any) => {
   if (msg.author.bot) return;
 
-  if (!msg.content.startsWith(process.env.PREFIX!)) return;
+  if (!msg.content.startsWith(prefix)) return;
 
-	const { channel } = msg.member!.voice;
+	const message = msg.content.replace(prefix, '').toLowerCase();
 
-	if (!channel) {
-		msg.channel.send('Você deve estar em um canal de voz!');
+	const command = Commands.filter(c => message.startsWith(c.id))[0];
+
+	if (!command) {
+		msg.channel.send('Essa opção não existe. Digite ;;help para ves as opções');
 		return;
 	}
 
-	msg.content = msg.content.toLowerCase();
+	if (command instanceof VoiceCommand) {
+		const { channel } = msg.member!.voice;
 
-	const connection = joinVoiceChannel({
-		channelId: channel.id,
-		guildId: channel.guild.id,
-		adapterCreator: channel.guild.voiceAdapterCreator,
-	});
-
-	// 30s to connect - otherwise connection rejected
-	entersState(connection, VoiceConnectionStatus.Ready, 30e3);
-
-	// need refactor
-	for (let i = 0; i < VoiceCommands.length; i++) {
-		const command = VoiceCommands[i];
-
-		if (msg.content.startsWith(process.env.PREFIX! + command.id)) {
-			if (Utils.hasOptions(command)) {
-				// get the option - example: ;;p 1 -> will catch the '1'
-				const option = /(?![a-z]\s)[0-9]/;
-
-				if (option.test(msg.content)) {
-					const optionSelected = Number(option.exec(msg.content)?.[0]);
-
-					const op = command?.options?.filter((op) => op.id === optionSelected);
-
-					if (op)
-						op[0].action(connection)
-					else {
-						msg.channel.send('Essa opção não existe. Digite ;;help para ves as opções');
-						return;
-					}
-				}
-			} else {
-				if (command.action)
-					command.action(msg, connection);
-			}
+		if (!channel) {
+			msg.channel.send('Você deve estar em um canal de voz!');
+			return;
 		}
+
+		connection = joinVoiceChannel({
+			channelId: channel.id,
+			guildId: channel.guild.id,
+			adapterCreator: channel.guild.voiceAdapterCreator,
+		});
+
+		// 30s to connect - otherwise connection rejected
+		entersState(connection, VoiceConnectionStatus.Ready, 30e3);
+
+		const option = Number(message.split(' ')[1]);
+
+		if (isNaN(option)) {
+			msg.channel.send('Digite uma opção valida para este comando!');
+			return;
+		}
+
+		const selected = command.options.filter(o => o.id === option)[0];
+		selected.action(connection);
+	}
+
+	if (command instanceof TextCommand) {
+		command.action(msg);
+	}
+
+	if (command instanceof ActionsCommand) {
+		if (connection !== undefined)
+			command.action(connection);
 	}
 });
 
-client.login(process.env.TOKEN).catch((err) => console.log(err));
+client.login(process.env.TOKEN).catch((err: any) => console.log(err));

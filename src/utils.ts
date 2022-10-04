@@ -1,19 +1,14 @@
-import { VoiceCommand } from './types/voiceCommand.type';
+import { VoiceCommand } from './models/voiceCommand.type';
 import { VoiceCommands } from './commands/voiceCommands';
-
-type CustomMessage = {
-	title: string;
-	fields: OptionCustomMessage[];
-}
-
-type OptionCustomMessage = {
-	name: string;
-	value: string;
-	inline: boolean;
-}
+import { OptionCustomMessage } from './types/optionCustomMessage.type';
+import { CustomMessage } from './types/customMessage.type';
+import fs from 'fs';
+import path from 'path';
+import { Commands } from './commands';
+import { BaseCommand } from './models/baseCommand.type';
 
 export class Utils {
-	static getOptions(command: VoiceCommand): OptionCustomMessage[] {
+	static getOptions(command: BaseCommand): OptionCustomMessage[] {
 		const commands = VoiceCommands.filter((c) => c === command);
 
 		const options: OptionCustomMessage[] = [];
@@ -31,15 +26,15 @@ export class Utils {
 		return options;
 	}
 
-	static hasOptions(command: VoiceCommand): boolean {
-		const com = VoiceCommands.filter((c) => c === command);
-		return com[0]?.options !== undefined;
+	static hasOptions(command: BaseCommand): boolean {
+		const com = Commands.filter((c) => c === command);
+		return com[0] instanceof VoiceCommand;
 	}
 
 	static getCommandsAsMessages(): CustomMessage[] {
 		const commands: CustomMessage[] = [];
 
-		VoiceCommands.map((com) => {
+		Commands.map((com) => {
 			commands.push({
 				title: com.name,
 				...(this.hasOptions(com) ? {
@@ -57,5 +52,9 @@ export class Utils {
 		});
 
 		return commands;
+	}
+
+	static getAllAssets(): string[] {
+		return fs.readdirSync(path.join(__dirname + './../src/assets'));
 	}
 }
