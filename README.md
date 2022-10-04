@@ -19,3 +19,6 @@ Sinta-se livre para adicionar novos sons e comandos criando sua PR.
 #### Tecnologias
 O projeto foi desenvolvido em Typescript - Node.js utilizando a lib Discord.js. <br>
 Você pode checar mais aqui: [Discord.js](https://discord.js.org/#/)
+
+#### Link de invite para o bot:
+[Invite](https://discord.com/oauth2/authorize?client_id=1023996609564004434&permissions=8&scope=bot)
