@@ -1,6 +1,6 @@
 # [WIP] - Vai dar namoro bot
 ## Comandos
-- [ ] Tocar os efeitos sonoros do programa (em progresso...)
+- [x] Tocar os efeitos sonoros do programa
 - [x] Colocar no chat por extenso os efeitos sonoros
 
 ## Como Contribuir
