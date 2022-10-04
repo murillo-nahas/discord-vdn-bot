@@ -1,30 +1,33 @@
 import { player } from '../player';
-import { VoiceCommand } from "../types/voiceCommand.type";
+import { ActionsCommand } from "../types/actionsCommand.type";
 
-export const ActionsCommands: VoiceCommand[] = [
+export const ActionsCommands: ActionsCommand[] = [
 	{
 		id: 'stop',
 		name: 'stop',
 		description: 'Pausa o aúdio.',
-		action: (msg, con) => {
+		action: (con) => {
 			player.pause();
-		}
+		},
+		type: 'text'
 	},
 	{
 		id: 'resume',
 		name: 'resume',
 		description: 'Despausa a música.',
-		action: (msg, con) => {
+		action: (con) => {
 			player.unpause();
-		}
+		},
+		type: 'text'
 	},
 	{
 		id: 'disconnect',
 		name: 'disconnect',
 		description: 'Desconecta o bot.',
-		action: (msg, con) => {
+		action: (con) => {
 			con.disconnect();
 			con.destroy();
-		}
+		},
+		type: 'text'
 	},
 ];

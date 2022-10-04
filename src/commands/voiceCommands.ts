@@ -1,11 +1,10 @@
-import { VoiceCommand, VoiceOption } from "../types/voiceCommand.type";
-import { player } from '../player';
-import { createAudioResource } from "@discordjs/voice";
-import { Utils } from '../utils';
-import { catchphrasesSet } from '../constants/messageConst';
-
+import { createAudioResource } from "@discordjs/voice"
 import path from 'path';
 import { createReadStream } from "fs";
+
+import { VoiceCommand, VoiceOption } from "../types/voiceCommand.type";
+import { player } from '../player';
+import { Utils } from '../utils';
 
 const createOptionFromAssets = (): VoiceOption[] => {
 	const options: VoiceOption[] = [];
@@ -33,6 +32,7 @@ export const VoiceCommands: VoiceCommand[] = [
 		id: 'play',
 		name: 'play',
 		description: 'Toca algum som do Vai dar Namoro!',
-		options: createOptionFromAssets()
+		options: createOptionFromAssets(),
+		type: 'voice'
 	}
 ];

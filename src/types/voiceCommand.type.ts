@@ -1,12 +1,8 @@
 import { VoiceConnection } from "@discordjs/voice";
-import { Message } from "discord.js";
+import { Command } from "./command.type";
 
-export type VoiceCommand = {
-	id: string;
-	name: string;
-	description: string;
-	options?: VoiceOption[];
-	action?: (msg: Message<boolean>, con: VoiceConnection) => void;
+export interface VoiceCommand extends Command<'voice'> {
+	options: VoiceOption[];
 }
 
 export type VoiceOption = {
