@@ -6,9 +6,9 @@
 #### Name: [ABEL JESUS](https://github.com/abjesus)
 - Place: Brazil
 - Bio: Fullstack Software Engineer
-- GitHub: [murillo-nahas](https://github.com/abjesus)
+- GitHub: [abjesus](https://github.com/abjesus)
 
 #### Name: [RODRIGO STRAMANTINOLI](https://github.com/ropoko)
 - Place: Brazil
 - Bio: Fullstack Software Engineer
-- GitHub: [murillo-nahas](https://github.com/ropoko)
+- GitHub: [ropoko](https://github.com/ropoko)
