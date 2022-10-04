@@ -1,7 +1,8 @@
 import {
   joinVoiceChannel,
   entersState,
-  VoiceConnectionStatus
+  VoiceConnectionStatus,
+	VoiceConnection
 } from '@discordjs/voice'
 import { Client, IntentsBitField, GatewayIntentBits } from 'discord.js'
 import dotenv from 'dotenv';
@@ -29,6 +30,8 @@ client.on('ready', () => {
   console.log('All right man! What do you need, an?');
 });
 
+let connection: VoiceConnection | undefined;
+
 client.on('messageCreate', async (msg: any) => {
   if (msg.author.bot) return;
 
@@ -36,16 +39,14 @@ client.on('messageCreate', async (msg: any) => {
 
 	const message = msg.content.replace(prefix, '').toLowerCase();
 
-	let command = Commands.filter(c => message.startsWith(c.id))[0];
+	const command = Commands.filter(c => message.startsWith(c.id))[0];
 
 	if (!command) {
 		msg.channel.send('Essa opção não existe. Digite ;;help para ves as opções');
 		return;
 	}
 
-	if (command.type === 'voice') {
-		command = command as VoiceCommand;
-
+	if (command instanceof VoiceCommand) {
 		const { channel } = msg.member!.voice;
 
 		if (!channel) {
@@ -53,7 +54,7 @@ client.on('messageCreate', async (msg: any) => {
 			return;
 		}
 
-		const connection = joinVoiceChannel({
+		connection = joinVoiceChannel({
 			channelId: channel.id,
 			guildId: channel.guild.id,
 			adapterCreator: channel.guild.voiceAdapterCreator,
@@ -62,22 +63,25 @@ client.on('messageCreate', async (msg: any) => {
 		// 30s to connect - otherwise connection rejected
 		entersState(connection, VoiceConnectionStatus.Ready, 30e3);
 
-		// check if has options
-		// if (command.options && command.options.length > 0) {
-		// 	const option = Number(message.split(' ')[1]);
+		const option = Number(message.split(' ')[1]);
 
-		// 	if (isNaN(option)) {
-		// 		msg.channel.send('Digite uma opção valida para este comando!');
-		// 		return;
-		// 	}
+		if (isNaN(option)) {
+			msg.channel.send('Digite uma opção valida para este comando!');
+			return;
+		}
 
-		// 	const selected = command.options.filter(o => o.id === option)[0];
-		// 	selected.action(connection);
-		// }
-	} else {
-		command = command as TextCommand | ActionsCommand;
+		const selected = command.options.filter(o => o.id === option)[0];
+		selected.action(connection);
 	}
-	
+
+	if (command instanceof TextCommand) {
+		command.action(msg);
+	}
+
+	if (command instanceof ActionsCommand) {
+		if (connection !== undefined)
+			command.action(connection);
+	}
 });
 
 client.login(process.env.TOKEN).catch((err: any) => console.log(err));
