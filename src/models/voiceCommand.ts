@@ -1,4 +1,4 @@
-import { BaseCommand } from './baseCommand.type';
+import { BaseCommand } from './baseCommand';
 import { Option } from '../types/option.type';
 
 export class VoiceCommand extends BaseCommand {

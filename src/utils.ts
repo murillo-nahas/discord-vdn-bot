@@ -1,11 +1,11 @@
-import { VoiceCommand } from './models/voiceCommand.type';
+import { VoiceCommand } from './models/voiceCommand';
 import { VoiceCommands } from './commands/voiceCommands';
 import { OptionCustomMessage } from './types/optionCustomMessage.type';
 import { CustomMessage } from './types/customMessage.type';
 import fs from 'fs';
 import path from 'path';
 import { Commands } from './commands';
-import { BaseCommand } from './models/baseCommand.type';
+import { BaseCommand } from './models/baseCommand';
 
 export class Utils {
 	static getOptions(command: BaseCommand): OptionCustomMessage[] {

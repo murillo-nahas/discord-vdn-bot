@@ -1,5 +1,5 @@
 import { VoiceConnection } from "@discordjs/voice";
-import { BaseCommand } from "./baseCommand.type";
+import { BaseCommand } from "./baseCommand";
 
 export class ActionsCommand extends BaseCommand {
   action = (con: VoiceConnection) => {};

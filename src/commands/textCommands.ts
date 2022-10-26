@@ -1,5 +1,5 @@
 import { catchphrasesSet } from "../constants/messageConst";
-import { TextCommand } from "../models/textCommand.type";
+import { TextCommand } from "../models/textCommand";
 import { Utils } from "../utils";
 
 export const TextCommands: TextCommand[] = [

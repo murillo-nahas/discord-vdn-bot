@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { BaseCommand } from "./baseCommand.type";
+import { BaseCommand } from "./baseCommand";
 
 export class TextCommand extends BaseCommand {
   action = (msg: Message<boolean>) => {};
